@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlxMax.Dal", "OlxMax.Dal\Ol
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CF9956A7-7161-4C99-9C2B-EDB8D907F93D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlxMax.Business", "OlxMax.Business\OlxMax.Business.csproj", "{BA5F67C3-8D21-4EF7-B87E-92CFDF799E68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{38FCB3D6-79F1-4411-9371-43D9F67286BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38FCB3D6-79F1-4411-9371-43D9F67286BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38FCB3D6-79F1-4411-9371-43D9F67286BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5F67C3-8D21-4EF7-B87E-92CFDF799E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5F67C3-8D21-4EF7-B87E-92CFDF799E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5F67C3-8D21-4EF7-B87E-92CFDF799E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5F67C3-8D21-4EF7-B87E-92CFDF799E68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{38FCB3D6-79F1-4411-9371-43D9F67286BF} = {CF9956A7-7161-4C99-9C2B-EDB8D907F93D}
+		{BA5F67C3-8D21-4EF7-B87E-92CFDF799E68} = {CF9956A7-7161-4C99-9C2B-EDB8D907F93D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F70DC8C0-4010-4ADE-865B-E96A61726A3C}
