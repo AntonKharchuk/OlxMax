@@ -1,5 +1,4 @@
 ﻿
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Numerics;
 using AutoMapper;
 using OlxMax.Dal.Features.UserFeatures;

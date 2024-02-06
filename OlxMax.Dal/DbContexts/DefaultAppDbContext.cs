@@ -11,13 +11,14 @@ namespace OlxMax.Dal.DbContexts
     public class DefaultAppDbContext : DbContext
     {
 
-        public DbSet<Bet> Bets { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Bet> Bets { get; set; }
         public DbSet<Auction> Auctions { get; set; }
 
-        public DefaultAppDbContext(DbContextOptions options) : base(options)
-        {
 
+        public DefaultAppDbContext(DbContextOptions<DefaultAppDbContext> options)
+      : base(options)
+        {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,7 +26,7 @@ namespace OlxMax.Dal.DbContexts
                 .HasMany(e => e.Bets)
                 .WithOne(e => e.Auction)
                 .HasForeignKey(e => e.AuctionId)
-                .IsRequired(true);
+                .IsRequired(false);
         }
 
     }

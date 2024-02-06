@@ -6,4 +6,6 @@ namespace OlxMax.Dal.Repositories
     public interface IUserRepository : IGenericRepository<User>
     {
     }
+
+
 }
