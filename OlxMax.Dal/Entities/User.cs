@@ -11,9 +11,8 @@ namespace OlxMax.Dal.Entities
 
         public double Balace { get; set; }
 
-        [Required]
         public string? UserName { get; set; }
-        [Required]
+
         public string? Password { get; set; }
 
     }
