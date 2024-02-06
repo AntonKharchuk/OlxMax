@@ -1,86 +1,75 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using OlxMax.Dal.DbContexts;
 using OlxMax.Dal.Entity;
-using OlxMax.Dal.Exeptions;
+using OlxMax.Dal.Repositories;
 
-namespace OlxMax.Dal.Repositories
+public class GenericRepository<T> : IGenericRepository<T>, IDisposable
+    where T : BaseEntity
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    private readonly DefaultAppDbContext _context;
+
+    private readonly DbSet<T> _table;
+
+    protected GenericRepository(DefaultAppDbContext context)
     {
-        private readonly DefaultAppDbContext _context;
+        _context = context;
+        _table = _context.Set<T>();
+    }
 
-        private DbSet<T> _table;
+    public async Task<T>? GetByIdAsync(int id)
+    {
+        return await _table.FirstOrDefaultAsync(g => g.Id == id);
+    }
 
-        public GenericRepository(DefaultAppDbContext context)
+    public async Task<IEnumerable<T>> GetAllAsync()
+    {
+        return await _table.ToListAsync();
+    }
+
+    public async Task<T> AddAsync(T entity)
+    {
+        var added = await _table.AddAsync(entity);
+
+        await _context.SaveChangesAsync();
+
+        return added.Entity;
+    }
+
+    public async Task<T> UpdateAsync(int id, T entity)
+    {
+        var dbEntity = await GetByIdAsync(id)!;
+
+        if (dbEntity is not null)
         {
-            _context = context;
-            _table = _context.Set<T>();
+            entity.Id = dbEntity.Id;
+            _context.Entry(dbEntity).CurrentValues.SetValues(entity);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(string includes = "")
+        await _context.SaveChangesAsync();
+
+        return dbEntity!;
+    }
+
+    public async Task<T>? DeleteAsync(int id)
+    {
+        var entity = await GetByIdAsync(id)!;
+
+        if (entity is null)
         {
-            var query = _table.AsQueryable();
-            query = IncludeFields(includes, query);
-            return await query.ToListAsync();
+            return null!;
         }
 
-        public async Task<T> GetByIdAsync(int id, string includes = "")
-        {
-            var query = _table.AsQueryable();
+        _table.Remove(entity);
 
-            query = IncludeFields(includes, query);
+        await _context.SaveChangesAsync();
 
-            return await query.FirstOrDefaultAsync(g => g.Id == id);
-        }
+        return entity;
+    }
 
-        public async Task AddAsync(T entity)
-        {
-            ThrowIfNull(entity);
-            await _table.AddAsync(entity);
-        }
-
-        public async Task UpdateAsync(T entity, int id)
-        {
-            ThrowIfNull(entity);
-            if (entity.Id != id)
-            {
-                throw new ArgumentException(nameof(entity), "entity.Id and id missmatch");
-            }
-            var tableEntity = await GetByIdAsync(id);
-            ThrowIfNull(tableEntity);
-            _context.Entry(tableEntity).CurrentValues.SetValues(entity);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-        public async Task DeleteAsync(int id)
-        {
-            var tableEntity = await GetByIdAsync(id);
-            ThrowIfNull(tableEntity);
-            _table.Remove(tableEntity);
-        }
-        private static void ThrowIfNull(T? entity)
-        {
-            if (entity is null)
-            {
-                throw new EntityNotFoundException("Entity with the specified ID not found.");
-            }
-        }
-        private static IQueryable<T> IncludeFields(string includes, IQueryable<T> query)
-        {
-            if (!string.IsNullOrEmpty(includes))
-            {
-                foreach (var include in includes.Split(","))
-                {
-                    query = query.Include(include);
-                }
-            }
-
-            return query;
-        }
+    public async void Dispose()
+    {
+        await _context.DisposeAsync();
+        GC.SuppressFinalize(this);
     }
 }
