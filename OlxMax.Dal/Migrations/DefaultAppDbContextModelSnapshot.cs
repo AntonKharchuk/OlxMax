@@ -37,7 +37,7 @@ namespace OlxMax.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Auctions");
+                    b.ToTable("Auctions", (string)null);
                 });
 
             modelBuilder.Entity("OlxMax.Dal.Entities.Bet", b =>
@@ -63,7 +63,7 @@ namespace OlxMax.Dal.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bets");
+                    b.ToTable("Bets", (string)null);
                 });
 
             modelBuilder.Entity("OlxMax.Dal.Entities.User", b =>
@@ -85,7 +85,7 @@ namespace OlxMax.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("OlxMax.Dal.Entities.Bet", b =>

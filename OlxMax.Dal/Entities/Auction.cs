@@ -9,6 +9,6 @@ namespace OlxMax.Dal.Entities
 
         public string? Description{ get; set; }
 
-        public IList<Bet> Bets { get; } = new List<Bet>();
+        public IList<Bet> Bets { get; set; } = new List<Bet>();
     }
 }

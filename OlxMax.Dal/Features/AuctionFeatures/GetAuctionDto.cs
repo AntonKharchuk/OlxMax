@@ -1,5 +1,6 @@
 ﻿
 using OlxMax.Dal.Entities;
+using OlxMax.Dal.Features.BetFeatures;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -13,7 +14,7 @@ namespace OlxMax.Dal.Features.AuctionFeatures
 
         public string? Description { get; set; }
 
-        public ICollection<Bet> Bets { get; } = new List<Bet>();
+        public ICollection<GetBetDto> Bets { get; set; } = new List<GetBetDto>();
     }
     public class CreateAuctionDto
     {
@@ -34,6 +35,6 @@ namespace OlxMax.Dal.Features.AuctionFeatures
         [Required]
         public string? Description { get; set; }
 
-        public ICollection<Bet> Bets { get; } = new List<Bet>();
+        //public ICollection<Bet> Bets { get; } = new List<Bet>();
     }
 }

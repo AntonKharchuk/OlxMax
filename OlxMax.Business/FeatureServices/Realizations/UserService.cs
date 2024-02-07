@@ -66,10 +66,10 @@ namespace OlxMax.Business.FeatureServices.Realizations
 
         public async Task<GetUserDto> DeleteUserAsync(int id)
         {
-            var deletedRecord = await _userRepository.DeleteAsync(id)!
+            var deletedUser = await _userRepository.DeleteAsync(id)!
                             ?? throw new EntityNotFoundException($"No User with Id '{id}'");
 
-            return _mapper.Map<GetUserDto>(deletedRecord);
+            return _mapper.Map<GetUserDto>(deletedUser);
         }
     }
 }

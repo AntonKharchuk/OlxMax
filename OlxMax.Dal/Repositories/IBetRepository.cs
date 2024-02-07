@@ -6,4 +6,5 @@ namespace OlxMax.Dal.Repositories
     public interface IBetRepository: IGenericRepository<Bet>
     {
     }
+
 }

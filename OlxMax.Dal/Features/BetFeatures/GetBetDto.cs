@@ -15,7 +15,6 @@ namespace OlxMax.Dal.Features.BetFeatures
         public User? User { get; set; }
 
         public int AuctionId { get; set; }
-        public Auction? Auction { get; set; }
     }
 
     public class CreateBetDto

@@ -7,27 +7,28 @@ using OlxMax.Dal.Repositories;
 public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     where T : BaseEntity
 {
-    private readonly DefaultAppDbContext _context;
+    protected readonly DefaultAppDbContext _context;
 
-    private readonly DbSet<T> _table;
+    protected readonly DbSet<T> _table;
 
-    protected GenericRepository(DefaultAppDbContext context)
+    public GenericRepository(DefaultAppDbContext context)
     {
         _context = context;
         _table = _context.Set<T>();
     }
 
-    public async Task<T>? GetByIdAsync(int id)
+    public virtual async Task<T>? GetByIdAsync(int id)
     {
-        return await _table.FirstOrDefaultAsync(g => g.Id == id);
+        var result  = await _table.FirstOrDefaultAsync(g => g.Id == id);
+        return result;
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public virtual async Task<IEnumerable<T>> GetAllAsync()
     {
         return await _table.ToListAsync();
     }
 
-    public async Task<T> AddAsync(T entity)
+    public virtual async Task<T> AddAsync(T entity)
     {
         var added = await _table.AddAsync(entity);
 
@@ -36,7 +37,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
         return added.Entity;
     }
 
-    public async Task<T> UpdateAsync(int id, T entity)
+    public virtual async Task<T> UpdateAsync(int id, T entity)
     {
         var dbEntity = await GetByIdAsync(id)!;
 
@@ -51,7 +52,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
         return dbEntity!;
     }
 
-    public async Task<T>? DeleteAsync(int id)
+    public virtual async Task<T>? DeleteAsync(int id)
     {
         var entity = await GetByIdAsync(id)!;
 
@@ -67,7 +68,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
         return entity;
     }
 
-    public async void Dispose()
+    public virtual async void Dispose()
     {
         await _context.DisposeAsync();
         GC.SuppressFinalize(this);

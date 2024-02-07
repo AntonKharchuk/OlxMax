@@ -10,7 +10,9 @@ namespace OlxMax.Business.Configs
     {
         public static void AddCustomServices(this IServiceCollection service)
         {
+            service.AddScoped<IAuctionService, AuctionService>();
             service.AddScoped<IUserService, UserService>();
+            service.AddScoped<IBetService, BetService>();
         }
     }
 }
