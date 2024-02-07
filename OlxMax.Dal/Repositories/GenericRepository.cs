@@ -7,11 +7,11 @@ using OlxMax.Dal.Repositories;
 public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     where T : BaseEntity
 {
-    protected readonly DefaultAppDbContext _context;
+    protected readonly DbContexOnStartUpCreation _context;
 
     protected readonly DbSet<T> _table;
 
-    public GenericRepository(DefaultAppDbContext context)
+    public GenericRepository(DbContexOnStartUpCreation context)
     {
         _context = context;
         _table = _context.Set<T>();

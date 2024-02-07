@@ -8,7 +8,7 @@ namespace OlxMax.Dal.Repositories
 {
     public class BetRepository : GenericRepository<Bet>, IBetRepository
     {
-        public BetRepository(DefaultAppDbContext context) : base(context)
+        public BetRepository(DbContexOnStartUpCreation context) : base(context)
         {
         }
 

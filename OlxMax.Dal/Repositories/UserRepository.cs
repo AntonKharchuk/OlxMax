@@ -6,7 +6,7 @@ namespace OlxMax.Dal.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        public UserRepository(DefaultAppDbContext context) : base(context)
+        public UserRepository(DbContexOnStartUpCreation context) : base(context)
         {
         }
     }

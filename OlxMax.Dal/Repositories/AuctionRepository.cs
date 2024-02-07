@@ -8,7 +8,7 @@ namespace OlxMax.Dal.Repositories
 {
     public class AuctionRepository : GenericRepository<Auction>, IAuctionRepository
     {
-        public AuctionRepository(DefaultAppDbContext context) : base(context)
+        public AuctionRepository(DbContexOnStartUpCreation context) : base(context)
         {
         }
 
