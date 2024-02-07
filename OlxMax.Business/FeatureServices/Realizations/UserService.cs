@@ -7,6 +7,8 @@ using OlxMax.Dal.Exeptions;
 using OlxMax.Dal.Features.UserFeatures;
 using OlxMax.Dal.Repositories;
 
+using System.ComponentModel.DataAnnotations;
+
 namespace OlxMax.Business.FeatureServices.Realizations
 {
     public class UserService: IUserService
@@ -44,15 +46,32 @@ namespace OlxMax.Business.FeatureServices.Realizations
 
         public async Task<GetUserDto> AddNewUserAsync(CreateUserDto createUserDto)
         {
+            await ValidateUserName(createUserDto.UserName);
+
             var user = _mapper.Map<User>(createUserDto);
+
 
             var createdUser = await _userRepository.AddAsync(user);
 
             return _mapper.Map<GetUserDto>(createdUser);
         }
 
+        private async Task ValidateUserName(string userName)
+        {
+            var allUsers = await  _userRepository.GetAllAsync();
+            foreach (var user in allUsers)
+            {
+                if (user.UserName == userName)
+                {
+                    throw new ValidationException($"User with userName '{userName}' allready exists");
+                }
+            }
+        }
+
         public async Task<GetUserDto> UpdateUserAsync(UpdateUserDto updateUserDto)
         {
+            await ValidateUserName(updateUserDto.UserName);
+
             if (await _userRepository.GetByIdAsync(updateUserDto.Id)! is null)
             {
                 throw new EntityNotFoundException($"No User with Id '{updateUserDto.Id}'");

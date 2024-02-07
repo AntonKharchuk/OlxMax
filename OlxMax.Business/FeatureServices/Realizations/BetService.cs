@@ -59,7 +59,10 @@ namespace OlxMax.Business.FeatureServices.Realizations
 
             await ValidateForeignKey(updateDto.UserId, updateDto.AuctionId);
 
+
             var bet = _mapper.Map<Bet>(updateDto);
+
+            await ValidateFields(bet);
 
             var updatedBet = await _betRepository.UpdateAsync(bet.Id, bet);
 
@@ -67,15 +70,30 @@ namespace OlxMax.Business.FeatureServices.Realizations
         }
         public async Task<GetBetDto> AddNewBetAsync(CreateBetDto createDto)
         {
+
             await ValidateForeignKey(createDto.UserId, createDto.AuctionId);
 
+
             var bet = _mapper.Map<Bet>(createDto);
+
+            await ValidateFields(bet);
 
             var createdBet = await _betRepository.AddAsync(bet);
 
             return _mapper.Map<GetBetDto>(createdBet);
         }
-
+        private async Task ValidateFields(Bet bet)
+        {
+            if (bet.Emount < 1)
+            {
+                throw new ArgumentOutOfRangeException("Emount must be greater than zero");
+            }
+            var auction = await _auctionRepository.GetByIdAsync(bet.AuctionId);
+            if (auction.MinEmount> bet.Emount)
+            {
+                throw new ArgumentOutOfRangeException("Emount must be greater than auction.MinEmount");
+            }
+        }
         public async Task<GetBetDto> DeleteBetAsync(int id)
         {
             var deletedBet = await _betRepository.DeleteAsync(id)!
