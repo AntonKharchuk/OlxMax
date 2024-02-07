@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Custom db
+*.db
+
 # User-specific files
 *.rsuser
 *.suo
@@ -49,6 +52,7 @@ Generated\ Files/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
 
 # Build Results of an ATL Project
 [Dd]ebugPS/
