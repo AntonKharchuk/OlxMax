@@ -32,7 +32,7 @@ namespace OlxMax.Dal.Repositories
 
         private Task<List<Bet>> GetBetsByAuctionId(int id)
         {
-            return _context.Bets.Where(b => b.AuctionId == id).ToListAsync();
+            return _context.Bets.Include(b => b.User).Where(b => b.AuctionId == id).ToListAsync();
         } 
 
     }

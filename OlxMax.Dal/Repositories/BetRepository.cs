@@ -11,6 +11,15 @@ namespace OlxMax.Dal.Repositories
         public BetRepository(DbContexOnStartUpCreation context) : base(context)
         {
         }
+        public override async Task<IEnumerable<Bet>> GetAllAsync()
+        {
+            return await _table.Include(b => b.User).ToListAsync();
+        }
+        public override async Task<Bet>? GetByIdAsync(int id)
+        {
+            var result = await _table.Include(b=>b.User).FirstOrDefaultAsync(g => g.Id == id);
+            return result;
+        }
 
         public override async Task<Bet> AddAsync(Bet entity)
         {
