@@ -10,8 +10,6 @@ namespace OlxMax.Business.FeatureServices.Interfaces
 
         Task<GetBetDto> AddNewBetAsync(CreateBetDto createDto);
 
-        Task<GetBetDto> UpdateBetAsync(UpdateBetDto updateDto);
-
         Task<GetBetDto> DeleteBetAsync(int id);
     }
 }

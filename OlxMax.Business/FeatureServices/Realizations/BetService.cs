@@ -50,49 +50,77 @@ namespace OlxMax.Business.FeatureServices.Realizations
             return _mapper.Map<GetBetDto>(bet);
         }
 
-        public async Task<GetBetDto> UpdateBetAsync(UpdateBetDto updateDto)
-        {
-            if (await _betRepository.GetByIdAsync(updateDto.Id)! is null)
-            {
-                throw new EntityNotFoundException($"No Bet with Id '{updateDto.Id}'");
-            }
+        //public async Task<GetBetDto> UpdateBetAsync(UpdateBetDto updateDto)
+        //{
+        //    var currentBet = await _betRepository.GetByIdAsync(updateDto.Id);
+        //    if (currentBet! is null)
+        //    {
+        //        throw new EntityNotFoundException($"No Bet with Id '{updateDto.Id}'");
+        //    }
 
-            await ValidateForeignKey(updateDto.UserId, updateDto.AuctionId);
+        //    var bet = _mapper.Map<Bet>(updateDto);
+
+        //    var auction = await _auctionRepository.GetByIdAsync(bet.AuctionId);
+
+        //    var user = await _userRepository.GetByIdAsync(bet.UserId);
+
+        //    await ValidateFields(bet, auction, user);
 
 
-            var bet = _mapper.Map<Bet>(updateDto);
+        //    if (bet.Emount- currentBet.Emount > user.Balace)
+        //        throw new ArgumentOutOfRangeException("'user.Balace' must be greater than 'bet.Emount - currentBet.Emount'");
 
-            await ValidateFields(bet);
+        //    var updatedBet = await _betRepository.UpdateAsync(bet.Id, bet);
 
-            var updatedBet = await _betRepository.UpdateAsync(bet.Id, bet);
+        //    user.Balace -= (bet.Emount - currentBet.Emount);
 
-            return  _mapper.Map<GetBetDto>(updatedBet);
-        }
+        //    await _userRepository.UpdateAsync(user.Id, user);
+
+        //    return  _mapper.Map<GetBetDto>(updatedBet);
+        //}
         public async Task<GetBetDto> AddNewBetAsync(CreateBetDto createDto)
         {
-
-            await ValidateForeignKey(createDto.UserId, createDto.AuctionId);
-
-
             var bet = _mapper.Map<Bet>(createDto);
 
-            await ValidateFields(bet);
+            var auction = await _auctionRepository.GetByIdAsync(bet.AuctionId);
+
+            var user = await _userRepository.GetByIdAsync(bet.UserId);
+
+            bool HasUserBetsOnAuction()
+            {
+                foreach (var userBet in auction.Bets)
+                {
+                    if (userBet.UserId == user.Id)
+                        return true;
+                }
+                return false;
+            }
+
+            await ValidateFields(bet, auction, user);
+
+            if (bet.Emount > user.Balace)
+                throw new ArgumentOutOfRangeException("'user.Balace' must be greater than 'bet.Emount'");
+
+            if (!HasUserBetsOnAuction()&&auction.MinEmount > bet.Emount)
+                throw new ArgumentOutOfRangeException("'bet.Emount' must be greater than 'auction.MinEmount'");
 
             var createdBet = await _betRepository.AddAsync(bet);
 
+            user.Balace -= bet.Emount;
+
+            await _userRepository.UpdateAsync(user.Id, user);
+
             return _mapper.Map<GetBetDto>(createdBet);
         }
-        private async Task ValidateFields(Bet bet)
+        private async Task ValidateFields(Bet bet, Auction auction, User user)
         {
             if (bet.Emount < 1)
-            {
-                throw new ArgumentOutOfRangeException("Emount must be greater than zero");
-            }
-            var auction = await _auctionRepository.GetByIdAsync(bet.AuctionId);
-            if (auction.MinEmount> bet.Emount)
-            {
-                throw new ArgumentOutOfRangeException("Emount must be greater than auction.MinEmount");
-            }
+                throw new ArgumentOutOfRangeException("'bet.Emount' must be greater than zero");
+
+            if (user! is null)
+                throw new EntityNotFoundException($"No User with Id '{bet.UserId}'");
+            if (auction! is null)
+                throw new EntityNotFoundException($"No Auction with Id '{bet.AuctionId}'");
         }
         public async Task<GetBetDto> DeleteBetAsync(int id)
         {
@@ -101,19 +129,5 @@ namespace OlxMax.Business.FeatureServices.Realizations
 
             return _mapper.Map<GetBetDto>(deletedBet);
         }
-
-        private async Task ValidateForeignKey(int userId , int auctionId)
-        {
-            if (await _userRepository.GetByIdAsync(userId)! is null)
-            {
-                throw new EntityNotFoundException($"No User with Id '{userId}'");
-            }
-
-            if (await _auctionRepository.GetByIdAsync(auctionId)! is null)
-            {
-                throw new EntityNotFoundException($"No Auction with Id '{auctionId}'");
-            }
-        }
-
     }
 }

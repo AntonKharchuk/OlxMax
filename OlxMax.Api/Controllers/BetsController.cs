@@ -44,13 +44,7 @@ namespace OlxMax.Api.Controllers
             return Ok(bet);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateBetAsync([FromBody] UpdateBetDto updateBetDto)
-        {
-            var bet = await _betService.UpdateBetAsync(updateBetDto);
-            return Ok(bet);
-        }
-
+      
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBetAsync(int id)
         {

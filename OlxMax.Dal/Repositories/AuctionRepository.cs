@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 using OlxMax.Dal.DbContexts;
 using OlxMax.Dal.Entities;
+using OlxMax.Dal.Exeptions;
 
 namespace OlxMax.Dal.Repositories
 {
@@ -25,7 +26,8 @@ namespace OlxMax.Dal.Repositories
         }
         public override async Task<Auction>? GetByIdAsync(int id)
         {
-            var result = await base.GetByIdAsync(id);
+            var result = await base.GetByIdAsync(id)!
+                ?? throw new EntityNotFoundException($"No Auction with Id '{id}'");
             result.Bets = await GetBetsByAuctionId(result.Id);
             return result;
         }
