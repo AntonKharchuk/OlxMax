@@ -17,7 +17,7 @@ namespace OlxMax.Dal.Repositories
         }
         public override async Task<Bet>? GetByIdAsync(int id)
         {
-            var result = await _table.Include(b=>b.User).FirstOrDefaultAsync(g => g.Id == id);
+            var result = await _table.Include(b => b.User).FirstOrDefaultAsync(g => g.Id == id);
             return result;
         }
 
@@ -29,7 +29,7 @@ namespace OlxMax.Dal.Repositories
             auction.Bets.Add(addedEntity.Entity);
             await _context.SaveChangesAsync();
 
-            return addedEntity.Entity; 
+            return addedEntity.Entity;
         }
         //public override async Task<Bet> DeleteAsync(int id)
         //{

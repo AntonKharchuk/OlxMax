@@ -24,7 +24,15 @@ namespace OlxMax.Dal.DbContexts
                 .HasMany(e => e.Bets)
                 .WithOne(e => e.Auction)
                 .HasForeignKey(e => e.AuctionId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Auction>()
+                .HasMany(e => e.Images)
+                .WithOne(e => e.Auction)
+                .HasForeignKey(e => e.AuctionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<User>().HasData(

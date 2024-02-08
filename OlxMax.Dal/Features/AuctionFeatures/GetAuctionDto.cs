@@ -1,5 +1,6 @@
 ﻿
 using OlxMax.Dal.Entities;
+using OlxMax.Dal.Features.AuctionImages;
 using OlxMax.Dal.Features.BetFeatures;
 
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,8 @@ namespace OlxMax.Dal.Features.AuctionFeatures
         public string? Description { get; set; }
 
         public ICollection<GetBetDto> Bets { get; set; } = new List<GetBetDto>();
+
+        public ICollection<GetAuctionImageDto> Images { get; set; } = new List<GetAuctionImageDto>();
     }
     public class CreateAuctionDto
     {

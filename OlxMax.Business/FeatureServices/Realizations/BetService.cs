@@ -110,16 +110,16 @@ namespace OlxMax.Business.FeatureServices.Realizations
 
             await _userRepository.UpdateAsync(user.Id, user);
 
-            return _mapper.Map<GetBetDto>(createdBet);
+            return _mapper.Map<GetBetDto>(createdBet)!;
         }
         private async Task ValidateFields(Bet bet, Auction auction, User user)
         {
             if (bet.Emount < 1)
                 throw new ArgumentOutOfRangeException("'bet.Emount' must be greater than zero");
 
-            if (user! is null)
+            if (user is null)
                 throw new EntityNotFoundException($"No User with Id '{bet.UserId}'");
-            if (auction! is null)
+            if (auction is null)
                 throw new EntityNotFoundException($"No Auction with Id '{bet.AuctionId}'");
         }
         public async Task<GetBetDto> DeleteBetAsync(int id)
@@ -127,7 +127,7 @@ namespace OlxMax.Business.FeatureServices.Realizations
             var deletedBet = await _betRepository.DeleteAsync(id)!
                             ?? throw new EntityNotFoundException($"No Bet with Id '{id}'");
 
-            return _mapper.Map<GetBetDto>(deletedBet);
+            return _mapper.Map<GetBetDto>(deletedBet)!;
         }
     }
 }

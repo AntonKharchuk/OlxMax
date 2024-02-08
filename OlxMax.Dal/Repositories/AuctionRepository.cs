@@ -15,7 +15,7 @@ namespace OlxMax.Dal.Repositories
 
         public override async Task<IEnumerable<Auction>> GetAllAsync()
         {
-            return await _table.Include(a => a.Bets).ToListAsync();
+            return await _table.Include(a => a.Bets).Include(a => a.Images).ToListAsync();
 
         }
         public override async Task<Auction>? GetByIdAsync(int id)
