@@ -15,20 +15,12 @@ namespace OlxMax.Dal.Repositories
 
         public override async Task<IEnumerable<Auction>> GetAllAsync()
         {
-            var result =  await base.GetAllAsync();
+            return await _table.Include(a => a.Bets).ToListAsync();
 
-            foreach (var item in result)
-            {
-                item.Bets = await GetBetsByAuctionId(item.Id);
-            }
-
-            return result;
         }
         public override async Task<Auction>? GetByIdAsync(int id)
         {
-            var result = await base.GetByIdAsync(id)!
-                ?? throw new EntityNotFoundException($"No Auction with Id '{id}'");
-            result.Bets = await GetBetsByAuctionId(result.Id);
+            var result = await _table.Include(a => a.Bets).Include(a => a.Images).FirstOrDefaultAsync(g => g.Id == id);
             return result;
         }
 
