@@ -41,17 +41,22 @@ namespace OlxMax.Business.FeatureServices.Realizations
             return _mapper.Map<GetAuctionImageDto>(createdAuctionImage)!;
         }
 
-        public async Task<GetAuctionImageDto> DeleteAuctionImageAsync(int id)
-        {
-            var deletedAuction = await _auctionImageRepository.DeleteAsync(id)!
-                            ?? throw new EntityNotFoundException($"No AuctionImage with Id '{id}'");
-
-            return _mapper.Map<GetAuctionImageDto>(deletedAuction)!;
-        }
-
         public async Task<GetAuctionImageDto> GetAuctionImageByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
+        public async Task<GetAuctionImageDto> DeleteAuctionImageAsync(int auctionId, int imageId)
+        {
+            var auctionImage = await _auctionImageRepository.GetByIdAsync(imageId)!
+                           ?? throw new EntityNotFoundException($"No AuctionImage with Id '{imageId}'");
+
+            if (auctionImage.AuctionId!= auctionId)
+                throw new EntityNotFoundException($"AuctionImage with Id '{imageId}' Does not refer to Auction with Id '{auctionId}'");
+
+            var deletedAuctionImage = await _auctionImageRepository.DeleteAsync(imageId)!;
+
+            return _mapper.Map<GetAuctionImageDto>(deletedAuctionImage)!;
+        }
+
     }
 }

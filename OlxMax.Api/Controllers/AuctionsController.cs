@@ -27,7 +27,7 @@ namespace OlxMax.Api.Controllers
         [HttpDelete("{id}/images/{imageId}")]
         public async Task<IActionResult> DeleteAuctionImageAsync(int id, int imageId)
         {
-            var auctionImage = await _auctionImageService.DeleteAuctionImageAsync(id);
+            var auctionImage = await _auctionImageService.DeleteAuctionImageAsync(id, imageId);
             return Ok(auctionImage);
         }
         [HttpPut("{id}/images")]

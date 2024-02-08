@@ -8,6 +8,6 @@ namespace OlxMax.Business.FeatureServices.Interfaces
 
         Task<GetAuctionImageDto> AddNewAuctionImageAsync(CreateAuctionImageDto createDto);
 
-        Task<GetAuctionImageDto> DeleteAuctionImageAsync(int id);
+        Task<GetAuctionImageDto> DeleteAuctionImageAsync(int auctionId, int imageId);
     }
 }
