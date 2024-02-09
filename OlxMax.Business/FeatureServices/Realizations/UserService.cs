@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OlxMax.Business.FeatureServices.Realizations
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -30,6 +30,19 @@ namespace OlxMax.Business.FeatureServices.Realizations
 
             return _mapper.Map<IEnumerable<GetUserDto>>(users);
         }
+        public async Task<GetUserDto> GetUserByUserNameAsync(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentOutOfRangeException(nameof(userName));
+            }
+
+            var user = await _userRepository.GetByUserNameAsync(userName)!
+                          ?? throw new EntityNotFoundException($"No User with UserName '{userName}'");
+
+            return _mapper.Map<GetUserDto>(user);
+        }
+
 
         public async Task<GetUserDto> GetUserByIdAsync(int id)
         {
@@ -89,6 +102,22 @@ namespace OlxMax.Business.FeatureServices.Realizations
                             ?? throw new EntityNotFoundException($"No User with Id '{id}'");
 
             return _mapper.Map<GetUserDto>(deletedUser);
+        }
+
+        public async Task<bool> CanLogInUserAsync(string userName, string password)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentOutOfRangeException(nameof(userName));
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentOutOfRangeException(nameof(password));
+            }
+
+            var result = await _userRepository.CanLogInAsync(userName,password);
+
+            return result;  
         }
     }
 }
