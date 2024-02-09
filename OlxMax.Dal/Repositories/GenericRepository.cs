@@ -20,7 +20,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     public virtual async Task<T>? GetByIdAsync(int id)
     {
         var result  = await _table.FirstOrDefaultAsync(g => g.Id == id);
-        return result;
+        return result!;
     }
 
     public virtual async Task<IEnumerable<T>> GetAllAsync()

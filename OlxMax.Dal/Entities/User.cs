@@ -1,8 +1,6 @@
 ﻿
 using OlxMax.Dal.Entity;
 
-using System.ComponentModel.DataAnnotations;
-
 namespace OlxMax.Dal.Entities
 {
     public class User:BaseEntity
